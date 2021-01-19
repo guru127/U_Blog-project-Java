@@ -52,29 +52,37 @@ public class Application {
             String choice = scanner.nextLine();
 
             switch (choice) {
-                case "1": login(); break;
-                case "2": register(); break;
-                case "3": createPost(); break;
-                case "4": searchPost(); break;
-                case "5": deletePost(); break;
-                case "6": filterPost(); break;
-                case "7": logout(); break;
-                case "8": flag=false; break;
-                default:  System.out.println("Error"); break;
+                case "1":
+                    login();
+                    break;
+                case "2":
+                    register();
+                    break;
+                case "3":
+                    createPost();
+                    break;
+                case "4":
+                    searchPost();
+                    break;
+                case "5":
+                    deletePost();
+                    break;
+                case "6":
+                    filterPost();
+                    break;
+                case "7":
+                    logout();
+                    break;
+                case "8":
+                    flag = false;
+                    break;
+                default:
+                    System.out.println("Error");
+                    break;
             }
         } while (flag);
     }
 
-    /**
-     * TODO 3.17. Implement the login() method. This method should prompt the user for the
-     *  email id and the password. Use the login() method of the UserService interface
-     *  to login into the application. If the user is successfully logged into the application,
-     *  print "You are logged in." on the console, set isLoggedIn to true and set
-     *  loggedInEmailId to the email id provided by the user.
-     *  Catch all the exceptions thrown by the login() method of the UserService interface with
-     *  a single catch block which handles all exceptions using the Exception class and print the
-     *  exception message using the getMessage() method.
-     */
     private void login() {
         if (isLoggedIn) {
             System.out.println("You are already logged in.");
@@ -85,19 +93,23 @@ public class Application {
         System.out.println("********Login********");
         System.out.println("*********************");
 
+        User user = new User();
+        System.out.println("Enter Email Id: ");
+        String emailId=scanner.nextLine();
+        user.setEmailId(emailId);
+        System.out.println("enter password: ");
+        user.setPassword(scanner.nextLine());
+        try{
+            userService.login(user);
+            System.out.println("you are logged in");
+            isLoggedIn=true;
+            loggedInEmailId= emailId;
 
+        } catch (Exception e) {
+            e.getMessage();
+        }
     }
 
-    /**
-     * TODO 3.18. Implement the register() method. This method should prompt the user for the
-     *  email id and the password. Use the register() method of the UserService interface
-     *  to register into the application. If the user is successfully registered into the application,
-     *  print "You are logged in." on the console, set isLoggedIn to true and set
-     *  loggedInEmailId to the email id provided by the user.
-     *  Catch all the exceptions thrown by the register() method of the UserService interface with
-     *  a single catch block which handles all exceptions using the Exception class and print the
-     *  exception message using the getMessage() method.
-     */
     private void register() {
         if (isLoggedIn) {
             System.out.println("You are already logged in.");
@@ -108,23 +120,22 @@ public class Application {
         System.out.println("******Register*******");
         System.out.println("*********************");
 
+        User user = new User();
+        System.out.println("Enter Email Id: ");
+        String emailId=scanner.nextLine();
+        user.setEmailId(emailId);
+        System.out.println("enter password: ");
+        user.setPassword(scanner.nextLine());
+        try{
+            userService.register(user);
+            System.out.println("You are logged in.");
+            isLoggedIn=true;
+            loggedInEmailId= emailId;
 
+        } catch (Exception e) {
+            e.getMessage();
+        }
     }
-
-    /**
-     * TODO 3.26. Implement the createPost() method. This method should prompt the user for the
-     *  post tag, the post title and the post description. Create a Post object with the following
-     *  values:
-     *   1. postId: 1
-     *   2. emailId: loggedInEmailId
-     *   3. tag, title, description: provided by the user
-     *   4. timestamp: For now get the timestamp using the LocalDateTime.now() method
-     *  Use the create() method of the PostService interface to create a new post into the database.
-     *  Catch all the exceptions thrown by the create() method of the PostService interface with
-     *  a single catch block which handles all exceptions using the Exception class and print the
-     *  exception message using the getMessage() method.
-     */
-
     /**
      * TODO 5.2: After saving the post details into the database using the createPost() method,\
      *  you should write logs in the following format.
@@ -135,7 +146,6 @@ public class Application {
      *  System.getProperty("user.dir")
      *  Print the "System.getProperty("user.dir")" to know where the log file is created.
      */
-
     /**
      * TODO 6.1: Modify the existing code such that the following two operations occur simultaneously on
      *  two independent threads.
@@ -152,11 +162,26 @@ public class Application {
         System.out.println("*****Create Post*****");
         System.out.println("*********************");
 
+        Post post= new Post();
+        post.setPostId(1);
+        post.setEmailId(loggedInEmailId);
+        System.out.println("enter post tag: ");
+        post.setTag(scanner.nextLine());
+        System.out.println("enter post title: ");
+        post.setTitle(scanner.nextLine());
+        System.out.println("enter post description");
+        post.setDescription(scanner.nextLine());
+        post.setTimestamp(LocalDateTime.now());
+
+        try{
+            postService.create(post);
+           // System.out.println("post is created");
+        } catch (Exception e) {
+          e.getMessage();
+        }
 
     }
-
-    /**
-     * TODO 4.3. Implement the searchPost() method. This method should prompt the user for the
+      /** TODO 4.3. Implement the searchPost() method. This method should prompt the user for the
      *  email id. Use the getPostsByEmailId() method of the PostService interface to get all the
      *  posts corresponding to the provided email id. If there are no posts corresponding to the
      *  provided email id, then throw the PostNotFoundException with a message "Sorry no posts
@@ -198,10 +223,7 @@ public class Application {
         System.out.println("*********************");
         System.out.println("*****Delete Post*****");
         System.out.println("*********************");
-
-
     }
-
     /**
      * TODO 4.12. Implement the filterPost() method. This method should show all the unique tags present
      *  in the POST table using the getAllTags() method of the PostService interface. Then it should
@@ -236,13 +258,10 @@ public class Application {
         loggedInEmailId = null;
     }
 
-    /**
-     * TODO 3.16. Instantiate the userService and the postService variables using the ServiceFactory.
-     */
     public static void main(String[] args) {
         ServiceFactory serviceFactory = new ServiceFactory();
-        UserService userService = null;
-        PostService postService = null;
+        UserService userService = serviceFactory.getUserService();
+        PostService postService = serviceFactory.getPostService();
         Application application = new Application(postService, userService);
         application.start();
     }

@@ -1,24 +1,64 @@
 package com.upgrad.ublog.services;
 
-/**
- * TODO: 3.22. Implement the PostService interface and implement this class using the Singleton pattern.
- *  (Hint: Should have a private no-arg Constructor, a private static instance attribute of type
- *  PostServiceImpl and a public static getInstance() method which returns the instance attribute.)
- * TODO: 3.23. Provide an attribute of type PostDAO and instantiate it using the DAOFactory class.
- *  Note: You should not have any reference to PostDAOImpl in this class.
- * TODO: 3.24. Define the following methods and return null for each of them. You will provide a
- *  proper implementation for each of these methods, later in this project.
- *  a. getPostsByEmailId()
- *  b. getPostsByTag()
- *  c. getAllTags()
- *  d. deletePost() (return false for this method for now)
- * TODO: 3.25. create() method should take post details as input and insert these details into
- *  the database using the create() method of PostDAO interface. Return the Post object which
- *  was returned by the create() method of the PostDAO interface.
- *  Note: The exception passed by DAO layer should not be passed to the presentation layer. Print the stack
- *  trace corresponding to the exception passed by DAO layer and throw a new exception of type Exception
- *  with a message "Some unexpected error occurred!"
- */
+import com.upgrad.ublog.dao.DAOFactory;
+import com.upgrad.ublog.dao.PostDAO;
+import com.upgrad.ublog.dao.PostDAOImpl;
+import com.upgrad.ublog.dtos.Post;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Set;
+
+public class PostServiceImpl implements PostService{
+    private static PostServiceImpl instance;
+    private DAOFactory daoFactory;
+    private PostDAO postDAO;
+
+    private PostServiceImpl(){
+        daoFactory=new DAOFactory();
+        postDAO=daoFactory.getPostDAO();
+
+    }
+
+    public static PostServiceImpl getInstance(){
+        if (instance==null){
+           instance= new PostServiceImpl();
+        }
+        return instance;
+    }
+
+    @Override
+    public Post create(Post post) throws Exception {
+        //Post post = null;
+        try{
+        if (post!=null){
+            post= postDAO.create(post);
+        }} catch (SQLException e) {
+            System.out.println("Some unexpected error occurred!");
+        }
+        return post;
+    }
+
+    @Override
+    public List<Post> getPostsByEmailId(String emailId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<Post> getPostsByTag(String tag) throws Exception {
+        return null;
+    }
+
+    @Override
+    public Set<String> getAllTags() throws Exception {
+        return null;
+    }
+
+    @Override
+    public boolean deletePost(int postId, String emailId) throws Exception {
+        return false;
+    }
+}
 
 /**
  * TODO: 4.2. Implement getPostsByEmailId() method which takes email id as an input parameter and
@@ -59,6 +99,3 @@ package com.upgrad.ublog.services;
  *  with a message "Some unexpected error occurred!"
  */
 
-public class PostServiceImpl {
-
-}
