@@ -10,20 +10,20 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
-public class PostServiceImpl implements PostService{
+public class PostServiceImpl implements PostService {
     private static PostServiceImpl instance;
     private DAOFactory daoFactory;
     private PostDAO postDAO;
 
-    private PostServiceImpl(){
-        daoFactory=new DAOFactory();
-        postDAO=daoFactory.getPostDAO();
+    private PostServiceImpl() {
+        daoFactory = new DAOFactory();
+        postDAO = daoFactory.getPostDAO();
 
     }
 
-    public static PostServiceImpl getInstance(){
-        if (instance==null){
-           instance= new PostServiceImpl();
+    public static PostServiceImpl getInstance() {
+        if (instance == null) {
+            instance = new PostServiceImpl();
         }
         return instance;
     }
@@ -31,9 +31,10 @@ public class PostServiceImpl implements PostService{
     @Override
     public Post create(Post post) throws Exception {
         //Post post = null;
-        try{
-        if (post!=null)
-            post = postDAO.create(post);
+        try {
+            if (post != null)
+                post = postDAO.create(post);
+
         } catch (SQLException e) {
             System.out.println("Some unexpected error occurred!");
         }
@@ -43,20 +44,20 @@ public class PostServiceImpl implements PostService{
     @Override
     public List<Post> getPostsByEmailId(String emailId) throws Exception {
         List<Post> postList;
-        try{
-            postList=postDAO.findByEmailId(emailId);
-        }catch (SQLException e) {
+        try {
+            postList = postDAO.findByEmailId(emailId);
+        } catch (SQLException e) {
             throw new Exception("Some unexpected exception occurred.");
         }
-        
+
         return postList;
     }
 
     @Override
     public List<Post> getPostsByTag(String tag) throws Exception {
         List<Post> postList;
-        try{
-            postList=postDAO.findByTag(tag);
+        try {
+            postList = postDAO.findByTag(tag);
         } catch (SQLException e) {
             throw new Exception("Some unexpected exception occurred.");
         }
@@ -66,13 +67,14 @@ public class PostServiceImpl implements PostService{
     @Override
     public Set<String> getAllTags() throws Exception {
         Set<String> tagSet = null;
-        List<String> tagList=postDAO.findAllTags();
+        List<String> tagList = postDAO.findAllTags();
         //tagList;
-        try{
-            tagList= postDAO.findAllTags();
+        try {
+            tagList = postDAO.findAllTags();
         } catch (SQLException e) {
             System.out.println("Some unexpected error occurred!");
-        } for (String s :tagList){
+        }
+        for (String s : tagList) {
             tagSet.add(s);
         }
 
@@ -99,6 +101,7 @@ public class PostServiceImpl implements PostService{
 
         return false;
     }
+
 }
 
 /**

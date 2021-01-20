@@ -18,6 +18,7 @@ public class Post {
         this.title = title;
         this.description = description;
         this.timestamp = timestamp;
+
     }
 
     public Post() {
@@ -72,6 +73,7 @@ public class Post {
         this.title = title;
     }
 
+    public void setPostId() {this.postId=postId; }
 
     @Override
    public String toString() {
@@ -87,7 +89,7 @@ public class Post {
 
     public static void main(String[] args) {
         Post post = new Post();
-        post.setPostId(2);
+        post.setPostId(0);
         post.setEmailId("dummy@dummy.com");
         post.setTag("tag");
         post.setTitle("title");
@@ -97,4 +99,6 @@ public class Post {
         System.out.println(post);
 
     }
+
+
 }

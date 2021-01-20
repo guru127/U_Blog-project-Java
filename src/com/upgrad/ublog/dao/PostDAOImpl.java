@@ -34,7 +34,7 @@ public class PostDAOImpl implements PostDAO {
         preparedStatement.setString(6, String.valueOf(post.getTimestamp()));
 
         preparedStatement.executeUpdate();
-    }
+            }
         catch (SQLException e) {
         e.printStackTrace();
     }
@@ -100,7 +100,6 @@ public class PostDAOImpl implements PostDAO {
             post.setDescription(resultSet.getString("description"));
             post.setDescription(resultSet.getString("timeStamp"));
 
-
         return post;
     }
 
@@ -132,6 +131,7 @@ public class PostDAOImpl implements PostDAO {
         }
         return flag;
     }
+
 }
 
 

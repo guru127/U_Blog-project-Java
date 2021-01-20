@@ -146,7 +146,8 @@ public class Application {
         System.out.println("*********************");
 
         Post post= new Post();
-        post.setPostId(1);
+       // int maxPostId= postService.getMaxPostId();
+        post.setPostId();
         post.setEmailId(loggedInEmailId);
         System.out.println("enter post tag: ");
         post.setTag(scanner.nextLine());

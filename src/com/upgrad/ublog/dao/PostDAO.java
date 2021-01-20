@@ -12,4 +12,6 @@ public interface PostDAO {
     public Post findByPostId(int postId) throws SQLException;
     public List<String> findAllTags() throws SQLException;
     public boolean deleteByPostId(int postId) throws SQLException;
+
+
 }
