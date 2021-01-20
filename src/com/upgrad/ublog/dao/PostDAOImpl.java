@@ -3,18 +3,16 @@ package com.upgrad.ublog.dao;
 import com.upgrad.ublog.db.Database;
 import com.upgrad.ublog.dtos.Post;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostDAOImpl implements PostDAO {
    private static PostDAOImpl instance;
    private PostDAOImpl(){}
 
-   public static PostDAO getInstance(){
+   public static PostDAOImpl getInstance(){
        if (instance ==null){
            instance =new PostDAOImpl();
        }
@@ -33,7 +31,7 @@ public class PostDAOImpl implements PostDAO {
         preparedStatement.setString(3, post.getTag());
         preparedStatement.setString(4, post.getTitle());
         preparedStatement.setString(5, post.getDescription());
-        preparedStatement.setString(6, String.valueOf(LocalDateTime.now()));
+        preparedStatement.setString(6, String.valueOf(post.getTimestamp()));
 
         preparedStatement.executeUpdate();
     }
@@ -45,34 +43,97 @@ public class PostDAOImpl implements PostDAO {
 
     @Override
     public List<Post> findByEmailId(String emailId) throws SQLException {
-        return null;
+       List<Post> postList= new ArrayList<>();
+       Connection connection =Database.getInstance();
+       Statement statement= connection.createStatement();
+       String sql ="SELECT * FROM POST WHERE emailId= = '"+emailId+"'";
+        ResultSet resultSet=statement.executeQuery(sql);
+
+        while (resultSet.next()){
+            Post post=new Post();
+            post.setPostId(resultSet.getInt("postId"));
+            post.setEmailId(resultSet.getString("emailId"));
+            post.setTag(resultSet.getString("tag"));
+            post.setTitle(resultSet.getString("title"));
+            post.setDescription(resultSet.getString("description"));
+            post.setDescription(resultSet.getString("timeStamp"));
+
+            postList.add(post);
+        }
+        return postList;
     }
 
     @Override
     public List<Post> findByTag(String tag) throws SQLException {
-        return null;
+        List<Post> postList= new ArrayList<>();
+        Connection connection =Database.getInstance();
+        Statement statement= connection.createStatement();
+        String sql ="SELECT * FROM POST WHERE emailId = '"+tag+"'";
+        ResultSet resultSet=statement.executeQuery(sql);
+
+        while (resultSet.next()){
+            Post post=new Post();
+            post.setPostId(resultSet.getInt("postId"));
+            post.setEmailId(resultSet.getString("emailId"));
+            post.setTag(resultSet.getString("tag"));
+            post.setTitle(resultSet.getString("title"));
+            post.setDescription(resultSet.getString("description"));
+            post.setDescription(resultSet.getString("timeStamp"));
+
+            postList.add(post);
+        }
+        return postList;
     }
 
     @Override
     public Post findByPostId(int postId) throws SQLException {
-        return null;
+        Post post=new Post();
+        Connection connection =Database.getInstance();
+        Statement statement= connection.createStatement();
+        String sql ="SELECT * FROM POST WHERE emailId = '"+postId+"'";
+        ResultSet resultSet=statement.executeQuery(sql);
+
+            post.setPostId(resultSet.getInt("postId"));
+            post.setEmailId(resultSet.getString("emailId"));
+            post.setTag(resultSet.getString("tag"));
+            post.setTitle(resultSet.getString("title"));
+            post.setDescription(resultSet.getString("description"));
+            post.setDescription(resultSet.getString("timeStamp"));
+
+
+        return post;
     }
 
     @Override
     public List<String> findAllTags() throws SQLException {
-        return null;
+        List<String> tagList= new ArrayList<>();
+        Connection connection =Database.getInstance();
+        Statement statement= connection.createStatement();
+        String sql ="SELECT * FROM POST";
+        ResultSet resultSet=statement.executeQuery(sql);
+
+        while (resultSet.next()){
+            tagList.add(resultSet.getString("tag"));
+        }
+        return tagList;
     }
 
     @Override
     public boolean deleteByPostId(int postId) throws SQLException {
-        return false;
+        boolean flag=false;
+        Connection connection =Database.getInstance();
+        Statement statement= connection.createStatement();
+        String sql ="DELETE FROM POST WHERE postId = '"+postId+"'";
+        try {
+            statement.executeUpdate(sql);
+            flag=true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return flag;
     }
 }
-/**
- * TODO: 4.1. Implement findByEmailId() method which takes email id as an input parameter and
- *  returns all the posts corresponding to the email id from the Post table defined
- *  in the database.
- */
+
 
 /**
  * TODO: 4.4. Implement the deleteByPostId() method which takes post id as an input argument and delete

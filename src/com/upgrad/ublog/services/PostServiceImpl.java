@@ -4,6 +4,7 @@ import com.upgrad.ublog.dao.DAOFactory;
 import com.upgrad.ublog.dao.PostDAO;
 import com.upgrad.ublog.dao.PostDAOImpl;
 import com.upgrad.ublog.dtos.Post;
+import com.upgrad.ublog.exceptions.PostNotFoundException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -31,9 +32,9 @@ public class PostServiceImpl implements PostService{
     public Post create(Post post) throws Exception {
         //Post post = null;
         try{
-        if (post!=null){
-            post= postDAO.create(post);
-        }} catch (SQLException e) {
+        if (post!=null)
+            post = postDAO.create(post);
+        } catch (SQLException e) {
             System.out.println("Some unexpected error occurred!");
         }
         return post;
@@ -41,32 +42,64 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<Post> getPostsByEmailId(String emailId) throws Exception {
-        return null;
+        List<Post> postList;
+        try{
+            postList=postDAO.findByEmailId(emailId);
+        }catch (SQLException e) {
+            throw new Exception("Some unexpected exception occurred.");
+        }
+        
+        return postList;
     }
 
     @Override
     public List<Post> getPostsByTag(String tag) throws Exception {
-        return null;
+        List<Post> postList;
+        try{
+            postList=postDAO.findByTag(tag);
+        } catch (SQLException e) {
+            throw new Exception("Some unexpected exception occurred.");
+        }
+        return postList;
     }
 
     @Override
     public Set<String> getAllTags() throws Exception {
-        return null;
+        Set<String> tagSet = null;
+        List<String> tagList=postDAO.findAllTags();
+        //tagList;
+        try{
+            tagList= postDAO.findAllTags();
+        } catch (SQLException e) {
+            System.out.println("Some unexpected error occurred!");
+        } for (String s :tagList){
+            tagSet.add(s);
+        }
+
+        return tagSet;
     }
 
     @Override
     public boolean deletePost(int postId, String emailId) throws Exception {
+        Post post = null;
+        try {
+            post = postDAO.findByPostId(postId);
+        } catch (SQLException e) {
+            throw new PostNotFoundException("No Post exist with the given Post Id ");
+        }
+
+        if (post != null && emailId.equals(post.getEmailId())) {
+            try {
+                postDAO.deleteByPostId(postId);
+                return true;
+            } catch (SQLException e) {
+                System.out.println("Some unexpected error occurred!");
+            }
+        }
+
         return false;
     }
 }
-
-/**
- * TODO: 4.2. Implement getPostsByEmailId() method which takes email id as an input parameter and
- *  returns all the posts corresponding to the email id using the findByEmailId() method of PostDAO interface.
- *  Note: The exception passed by DAO layer should not be passed to the presentation layer. Print the stack
- *  trace corresponding to the exception passed by DAO layer and throw a new exception of type Exception
- *  with a message "Some unexpected error occurred!"
- */
 
 /**
  * TODO: 4.6. Implement deletePost() method which takes post id and email id as an input parameter.
@@ -78,6 +111,14 @@ public class PostServiceImpl implements PostService{
  *   deleteByPostId() method.
  *  4. If the post was not created by the same user whose email id is passed as an input argument, don't delete
  *   the post, and return false.
+ *  Note: The exception passed by DAO layer should not be passed to the presentation layer. Print the stack
+ *  trace corresponding to the exception passed by DAO layer and throw a new exception of type Exception
+ *  with a message "Some unexpected error occurred!"
+ */
+
+/**
+ * TODO: 4.2. Implement getPostsByEmailId() method which takes email id as an input parameter and
+ *  returns all the posts corresponding to the email id using the findByEmailId() method of PostDAO interface.
  *  Note: The exception passed by DAO layer should not be passed to the presentation layer. Print the stack
  *  trace corresponding to the exception passed by DAO layer and throw a new exception of type Exception
  *  with a message "Some unexpected error occurred!"

@@ -87,7 +87,7 @@ public class Post {
 
     public static void main(String[] args) {
         Post post = new Post();
-        post.setPostId(1);
+        post.setPostId(2);
         post.setEmailId("dummy@dummy.com");
         post.setTag("tag");
         post.setTitle("title");

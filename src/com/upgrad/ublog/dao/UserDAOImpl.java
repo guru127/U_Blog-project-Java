@@ -9,7 +9,7 @@ public class UserDAOImpl implements UserDAO {
     private static UserDAOImpl instance;
     private UserDAOImpl(){}
 
-    public static UserDAO getInstance() {
+    public static UserDAOImpl getInstance() {
         if (instance==null){
             instance=new UserDAOImpl();
         }
@@ -41,6 +41,7 @@ public class UserDAOImpl implements UserDAO {
         Connection connection = Database.getInstance();
         Statement statement = connection.createStatement();
         String sql = "SELECT * FROM user WHERE emailId = '" + emailId +"'";
+
         ResultSet resultSet = statement.executeQuery(sql);
 
         if (resultSet.next()) {

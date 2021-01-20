@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Application {
     private Scanner scanner;
@@ -52,33 +53,15 @@ public class Application {
             String choice = scanner.nextLine();
 
             switch (choice) {
-                case "1":
-                    login();
-                    break;
-                case "2":
-                    register();
-                    break;
-                case "3":
-                    createPost();
-                    break;
-                case "4":
-                    searchPost();
-                    break;
-                case "5":
-                    deletePost();
-                    break;
-                case "6":
-                    filterPost();
-                    break;
-                case "7":
-                    logout();
-                    break;
-                case "8":
-                    flag = false;
-                    break;
-                default:
-                    System.out.println("Error");
-                    break;
+                case "1": login(); break;
+                case "2": register(); break;
+                case "3": createPost(); break;
+                case "4": searchPost(); break;
+                case "5": deletePost(); break;
+                case "6": filterPost(); break;
+                case "7": logout();  break;
+                case "8": flag = false; break;
+                default: System.out.println("Error"); break;
             }
         } while (flag);
     }
@@ -106,7 +89,7 @@ public class Application {
             loggedInEmailId= emailId;
 
         } catch (Exception e) {
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -133,7 +116,7 @@ public class Application {
             loggedInEmailId= emailId;
 
         } catch (Exception e) {
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
     }
     /**
@@ -177,19 +160,10 @@ public class Application {
             postService.create(post);
            // System.out.println("post is created");
         } catch (Exception e) {
-          e.getMessage();
+            System.out.println(e.getMessage());
         }
 
     }
-      /** TODO 4.3. Implement the searchPost() method. This method should prompt the user for the
-     *  email id. Use the getPostsByEmailId() method of the PostService interface to get all the
-     *  posts corresponding to the provided email id. If there are no posts corresponding to the
-     *  provided email id, then throw the PostNotFoundException with a message "Sorry no posts
-     *  exists for this email id". Otherwise, print all the posts on the console.
-     *  Catch all the exceptions thrown by the getPostsByEmailId() method of the PostService interface with
-     *  a single catch block which handles all exceptions using the Exception class and print the
-     *  exception message using the getMessage() method.
-     */
     private void searchPost() {
         if (!isLoggedIn) {
             System.out.println("You are not logged in.");
@@ -200,9 +174,56 @@ public class Application {
         System.out.println("*****Search Post*****");
         System.out.println("*********************");
 
-
+        System.out.println("enter emailId : ");
+        List<Post> post=null;
+        try{
+            post=postService.getPostsByEmailId(scanner.nextLine());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        if(post!=null){
+            for (Post eachPost: post){
+                System.out.println(eachPost);
+            }
+        }
+        else {
+            System.out.println("Sorry no posts exists for this email id");
+            return;
+        }
     }
+    /** TODO 4.3. Implement the searchPost() method. This method should prompt the user for the
+     *  email id. Use the getPostsByEmailId() method of the PostService interface to get all the
+     *  posts corresponding to the provided email id. If there are no posts corresponding to the
+     *  provided email id, then throw the PostNotFoundException with a message "Sorry no posts
+     *  exists for this email id". Otherwise, print all the posts on the console.
+     *  Catch all the exceptions thrown by the getPostsByEmailId() method of the PostService interface with
+     *  a single catch block which handles all exceptions using the Exception class and print the
+     *  exception message using the getMessage() method.
+     */
 
+    private void deletePost() {
+        if (!isLoggedIn) {
+            System.out.println("You are not logged in.");
+            return;
+        }
+
+        System.out.println("*********************");
+        System.out.println("*****Delete Post*****");
+        System.out.println("*********************");
+
+        System.out.println("enter postId: ");
+        try{
+            if(postService.deletePost(scanner.nextInt(),loggedInEmailId)){
+            System.out.println("post deleted successfully ");
+            }
+            else {
+                System.out.println(" You are not authorised to delete this post");
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
     /**
      * TODO 4.7. Implement the deletePost() method. This method should prompt the user for the
      *  post id. Use the deletePost() method of the PostService interface to delete the post
@@ -214,16 +235,6 @@ public class Application {
      *  a single catch block which handles all exceptions using the Exception class and print the
      *  exception message using the getMessage() method.
      */
-    private void deletePost() {
-        if (!isLoggedIn) {
-            System.out.println("You are not logged in.");
-            return;
-        }
-
-        System.out.println("*********************");
-        System.out.println("*****Delete Post*****");
-        System.out.println("*********************");
-    }
     /**
      * TODO 4.12. Implement the filterPost() method. This method should show all the unique tags present
      *  in the POST table using the getAllTags() method of the PostService interface. Then it should
@@ -244,6 +255,30 @@ public class Application {
         System.out.println("*********************");
         System.out.println("*****Filter Post*****");
         System.out.println("*********************");
+
+        Set<String> tagSet=null;
+        try {
+            tagSet = postService.getAllTags();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }if(tagSet!=null){
+        for (String tag: tagSet) {
+            System.out.println(tag);
+        }
+        }
+        System.out.println("select tag: ");
+        String tag =scanner.nextLine();
+        List<Post> post=null;
+        try{
+            post=postService.getPostsByTag(tag);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        if(post!=null){
+            for (Post eachPost: post){
+                System.out.println(eachPost);
+            }
+        }
 
 
     }
