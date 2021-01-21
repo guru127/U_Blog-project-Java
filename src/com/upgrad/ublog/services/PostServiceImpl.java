@@ -7,6 +7,8 @@ import com.upgrad.ublog.dtos.Post;
 import com.upgrad.ublog.exceptions.PostNotFoundException;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -55,7 +57,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getPostsByTag(String tag) throws Exception {
-        List<Post> postList;
+        List<Post> postList=new ArrayList<>();
         try {
             postList = postDAO.findByTag(tag);
         } catch (SQLException e) {
@@ -66,9 +68,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Set<String> getAllTags() throws Exception {
-        Set<String> tagSet = null;
+        Set<String> tagSet =new HashSet<>();
         List<String> tagList = postDAO.findAllTags();
-        //tagList;
         try {
             tagList = postDAO.findAllTags();
         } catch (SQLException e) {

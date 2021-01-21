@@ -11,6 +11,7 @@ import com.upgrad.ublog.utils.LogWriter;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -159,7 +160,8 @@ public class Application {
 
         try{
             postService.create(post);
-           // System.out.println("post is created");
+            System.out.println("post is created");
+            return;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -178,7 +180,9 @@ public class Application {
         System.out.println("enter emailId : ");
         List<Post> post=null;
         try{
-            post=postService.getPostsByEmailId(scanner.nextLine());
+            String emailId=scanner.nextLine();
+            System.out.println(emailId);
+            post=postService.getPostsByEmailId(emailId);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -213,8 +217,10 @@ public class Application {
         System.out.println("*********************");
 
         System.out.println("enter postId: ");
+
         try{
-            if(postService.deletePost(scanner.nextInt(),loggedInEmailId)){
+            int postId=scanner.nextInt();
+            if(postService.deletePost(postId,loggedInEmailId)){
             System.out.println("post deleted successfully ");
             }
             else {
@@ -257,7 +263,8 @@ public class Application {
         System.out.println("*****Filter Post*****");
         System.out.println("*********************");
 
-        Set<String> tagSet=null;
+        Set<String> tagSet=new HashSet<>();
+
         try {
             tagSet = postService.getAllTags();
         } catch (Exception e) {

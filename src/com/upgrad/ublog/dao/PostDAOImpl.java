@@ -40,26 +40,60 @@ public class PostDAOImpl implements PostDAO {
     }
         return post;
 }
+    //Implement findByEmailId() method which takes email id
+    // as an input parameter and returns all the posts corresponding t
+    // o the email id from the Post table defined in the database.
+
 
     @Override
     public List<Post> findByEmailId(String emailId) throws SQLException {
        List<Post> postList= new ArrayList<>();
        Connection connection =Database.getInstance();
-       Statement statement= connection.createStatement();
-       String sql ="SELECT * FROM POST WHERE emailId= = '"+emailId+"'";
-        ResultSet resultSet=statement.executeQuery(sql);
+        String sql ="SELECT * FROM post WHERE emailId='"+emailId+"'";
+        ResultSet resultSet=null;
+        try {
+            Statement statement= connection.createStatement();
+            resultSet=statement.executeQuery(sql);
+            //PreparedStatement preparedStatement = connection.prepareStatement(sql);
+           // preparedStatement.setString(1,emailId);
+           // resultSet = preparedStatement.executeQuery(sql);
+            while (resultSet.next()) {
+                Post post = new Post();
+                post.setPostId(resultSet.getInt("postId"));
+                post.setEmailId(resultSet.getString("emailId"));
+                post.setTag(resultSet.getString("tag"));
+                post.setTitle(resultSet.getString("title"));
+                post.setDescription(resultSet.getString("description"));
+                post.setTimestamp(LocalDateTime.parse(resultSet.getString("timeStamp")));
 
-        while (resultSet.next()){
-            Post post=new Post();
-            post.setPostId(resultSet.getInt("postId"));
-            post.setEmailId(resultSet.getString("emailId"));
-            post.setTag(resultSet.getString("tag"));
-            post.setTitle(resultSet.getString("title"));
-            post.setDescription(resultSet.getString("description"));
-            post.setDescription(resultSet.getString("timeStamp"));
+                postList.add(post);
+            }
+        } catch (SQLException e) {
+            e.getMessage();
+    /*   String sql ="SELECT * FROM post WHERE emailId=?";
+       ResultSet resultSet;
+       try {
+           System.out.println(" emailid   ="+emailId);
+           PreparedStatement preparedStatement = connection.prepareStatement(sql);
+           preparedStatement.setString(1,emailId);
+           resultSet = preparedStatement.executeQuery(sql);
+           System.out.println(resultSet+"thiss");
 
-            postList.add(post);
-        }
+            while (resultSet.next()) {
+                Post post = new Post();
+                post.setPostId(resultSet.getInt("postId"));
+                post.setEmailId(resultSet.getString("emailId"));
+                post.setTag(resultSet.getString("tag"));
+                post.setTitle(resultSet.getString("title"));
+                post.setDescription(resultSet.getString("description"));
+                post.setDescription(resultSet.getString("timeStamp"));
+
+                postList.add(post);
+            }
+        } catch (SQLException e) {
+           e.getMessage();*/
+       }
+        System.out.println(postList);
         return postList;
     }
 
@@ -68,7 +102,7 @@ public class PostDAOImpl implements PostDAO {
         List<Post> postList= new ArrayList<>();
         Connection connection =Database.getInstance();
         Statement statement= connection.createStatement();
-        String sql ="SELECT * FROM POST WHERE emailId = '"+tag+"'";
+        String sql ="SELECT * FROM post WHERE emailId = '"+tag+"'";
         ResultSet resultSet=statement.executeQuery(sql);
 
         while (resultSet.next()){
@@ -78,7 +112,7 @@ public class PostDAOImpl implements PostDAO {
             post.setTag(resultSet.getString("tag"));
             post.setTitle(resultSet.getString("title"));
             post.setDescription(resultSet.getString("description"));
-            post.setDescription(resultSet.getString("timeStamp"));
+            post.setTimestamp(LocalDateTime.parse(resultSet.getString("timeStamp")));
 
             postList.add(post);
         }
@@ -90,16 +124,21 @@ public class PostDAOImpl implements PostDAO {
         Post post=new Post();
         Connection connection =Database.getInstance();
         Statement statement= connection.createStatement();
-        String sql ="SELECT * FROM POST WHERE emailId = '"+postId+"'";
-        ResultSet resultSet=statement.executeQuery(sql);
-
-            post.setPostId(resultSet.getInt("postId"));
-            post.setEmailId(resultSet.getString("emailId"));
-            post.setTag(resultSet.getString("tag"));
-            post.setTitle(resultSet.getString("title"));
-            post.setDescription(resultSet.getString("description"));
-            post.setDescription(resultSet.getString("timeStamp"));
-
+        String sql ="SELECT * FROM post WHERE postId='"+postId+"'";
+        ResultSet resultSet=null;
+        try{
+            resultSet=statement.executeQuery(sql);
+            while(resultSet.next()) {
+                post.setPostId(resultSet.getInt("postId"));
+                post.setEmailId(resultSet.getString("emailId"));
+                post.setTag(resultSet.getString("tag"));
+                post.setTitle(resultSet.getString("title"));
+                post.setDescription(resultSet.getString("description"));
+                post.setDescription(resultSet.getString("timeStamp"));
+            }
+        } catch (SQLException e) {
+            e.getMessage();
+        }
         return post;
     }
 
@@ -122,7 +161,7 @@ public class PostDAOImpl implements PostDAO {
         boolean flag=false;
         Connection connection =Database.getInstance();
         Statement statement= connection.createStatement();
-        String sql ="DELETE FROM POST WHERE postId = '"+postId+"'";
+        String sql ="DELETE FROM post WHERE postId ='"+postId+"'";
         try {
             statement.executeUpdate(sql);
             flag=true;
