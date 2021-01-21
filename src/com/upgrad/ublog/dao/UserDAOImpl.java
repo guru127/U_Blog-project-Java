@@ -71,10 +71,5 @@ public class UserDAOImpl implements UserDAO {
         } catch (Exception e) {
             System.out.println("FAILED");
         }
-
-        /**
-//         * Following should be the desired output of the main method.
-//         * User{userId=11, emailId='temp@temp.temp', password='temp'}
-//         */
     }
 }

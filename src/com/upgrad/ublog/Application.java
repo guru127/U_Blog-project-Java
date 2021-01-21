@@ -118,17 +118,7 @@ public class Application {
             System.out.println(e.getMessage());
         }
     }
-    /**
-     * TODO 5.2: After saving the post details into the database using the createPost() method,\
-     *  you should write logs in the following format.
-     *  <formatted timestamp for that post><\t>New post with title [ <title for that post> ] created by [ <emailId of the creator> ]
-     *  (Hint: you should use the LogWriter object)
-     *  (Hint: Use the following method to get the user's current directory. All the logs should be stored
-     *  in the file that is located at the following directory.
-     *  System.getProperty("user.dir")
-     *  Print the "System.getProperty("user.dir")" to know where the log file is created.
-     */
-    /**
+      /**
      * TODO 6.1: Modify the existing code such that the following two operations occur simultaneously on
      *  two independent threads.
      *  thread1: Saving data into the database
@@ -145,7 +135,6 @@ public class Application {
         System.out.println("*********************");
 
         Post post= new Post();
-       // int maxPostId= postService.getMaxPostId();
         post.setPostId();
         post.setEmailId(loggedInEmailId);
         System.out.println("enter post tag: ");
@@ -158,7 +147,14 @@ public class Application {
         try{
             postService.create(post);
             System.out.println("post is created");
+
+            String messege=LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))+" "
+                    +"New post with title ["+post.getTitle()+"] created by [ "+post.getEmailId()+"]";
+            String directory=System.getProperty("user.dir");//to fetch file path
+            LogWriter.writeLog(messege, directory);
+
             return;
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

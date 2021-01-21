@@ -19,12 +19,11 @@ public class PostDAOImpl implements PostDAO {
        }
        return instance;
    }
-
     @Override
     public Post create(Post post) throws SQLException {
         Connection connection = Database.getInstance();
-
         String sql="INSERT INTO POST (postId, emailId, tag, title, description, timestamp) VALUES(?,?,?,?,?,?)";
+
         try {
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, post.getPostId());
@@ -41,8 +40,6 @@ public class PostDAOImpl implements PostDAO {
     }
         return post;
 }
-
-
     @Override
     public List<Post> findByEmailId(String emailId) throws SQLException {
        List<Post> postList= new ArrayList<>();
@@ -70,7 +67,6 @@ public class PostDAOImpl implements PostDAO {
        }
         return postList;
     }
-
     @Override
     public List<Post> findByTag(String tag) throws SQLException {
         List<Post> postList= new ArrayList<>();
@@ -98,8 +94,6 @@ public class PostDAOImpl implements PostDAO {
         }
         return postList;
     }
-
-
     @Override
     public Post findByPostId(int postId) throws SQLException {
         Post post=new Post();
@@ -122,7 +116,6 @@ public class PostDAOImpl implements PostDAO {
         }
         return post;
     }
-
     @Override
     public List<String> findAllTags() throws SQLException {
         List<String> tagList= new ArrayList<>();
@@ -136,7 +129,6 @@ public class PostDAOImpl implements PostDAO {
         }
         return tagList;
     }
-
     @Override
     public boolean deleteByPostId(int postId) throws SQLException {
         boolean flag=false;
@@ -146,28 +138,9 @@ public class PostDAOImpl implements PostDAO {
         try {
             statement.executeUpdate(sql);
             flag=true;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return flag;
     }
-
 }
-
-
-/**
- * TODO: 4.4. Implement the deleteByPostId() method which takes post id as an input argument and delete
- *  the corresponding post from the database. If the post was deleted successfully, then return true,
- *  otherwise, return false. (Hint: The executeUpdate() method returns the count of rows affected by the
- *  query.)
- * TODO: 4.5. Implement the findByPostId() method which takes post id as an input argument and return the
- *  post details from the database. If no post exists for the given id, then return a Post object
- *  without setting any of its attributes.
- */
-
-/**
- * TODO: 4.8. Implement findAllTags() method which returns a list of all tags in the POST table.
- * TODO: 4.9. Implement findByTag() method which takes "tag" as an input argument and returns all the
- *  posts corresponding to the input "tag" from the POST table defined in the database.
- */
-
