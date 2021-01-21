@@ -75,8 +75,8 @@ public class PostDAOImpl implements PostDAO {
     public List<Post> findByTag(String tag) throws SQLException {
         List<Post> postList= new ArrayList<>();
         Connection connection =Database.getInstance();
-        String sql ="SELECT * FROM post WHERE emailId='"+tag+"'";
-        ResultSet resultSet=null;
+        String sql ="SELECT * FROM post WHERE tag='"+tag+"'";
+        ResultSet resultSet;
         try {
             Statement statement= connection.createStatement();
             resultSet=statement.executeQuery(sql);
