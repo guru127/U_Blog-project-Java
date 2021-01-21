@@ -1,5 +1,6 @@
 package com.upgrad.ublog.dtos;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class Post {
@@ -8,10 +9,10 @@ public class Post {
   private String tag;
   private String title;
   private String description;
-  private LocalDateTime timestamp;
+  private String timestamp;
 
     public Post(int postId, String emailId, String tag, String title, String description,
-                LocalDateTime timestamp) {
+                String timestamp) {
         this.postId = postId;
         this.emailId = emailId;
         this.tag = tag;
@@ -33,11 +34,11 @@ public class Post {
         this.description = description;
     }
 
-    public LocalDateTime getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -89,12 +90,12 @@ public class Post {
 
     public static void main(String[] args) {
         Post post = new Post();
-        post.setPostId(0);
+        post.setPostId();
         post.setEmailId("dummy@dummy.com");
         post.setTag("tag");
         post.setTitle("title");
         post.setDescription("Description");
-        post.setTimestamp(LocalDateTime.now());
+        post.setTimestamp( LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
 
         System.out.println(post);
 

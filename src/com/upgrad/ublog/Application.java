@@ -6,11 +6,12 @@ import com.upgrad.ublog.exceptions.PostNotFoundException;
 import com.upgrad.ublog.services.PostService;
 import com.upgrad.ublog.services.ServiceFactory;
 import com.upgrad.ublog.services.UserService;
-import com.upgrad.ublog.utils.DateTimeFormatter;
 import com.upgrad.ublog.utils.LogWriter;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Application {
@@ -153,8 +154,7 @@ public class Application {
         post.setTitle(scanner.nextLine());
         System.out.println("enter post description");
         post.setDescription(scanner.nextLine());
-        post.setTimestamp(LocalDateTime.now());
-
+        post.setTimestamp( LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
         try{
             postService.create(post);
             System.out.println("post is created");
@@ -178,30 +178,21 @@ public class Application {
         List<Post> post=null;
         try{
             String emailId=scanner.nextLine();
-            System.out.println(emailId);
             post=postService.getPostsByEmailId(emailId);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        if(post!=null){
+        if(post.size()!=0){
             for (Post eachPost: post){
                 System.out.println(eachPost);
             }
-        }
+            }
         else {
             System.out.println("Sorry no posts exists for this email id");
             return;
         }
     }
-    /** TODO 4.3. Implement the searchPost() method. This method should prompt the user for the
-     *  email id. Use the getPostsByEmailId() method of the PostService interface to get all the
-     *  posts corresponding to the provided email id. If there are no posts corresponding to the
-     *  provided email id, then throw the PostNotFoundException with a message "Sorry no posts
-     *  exists for this email id". Otherwise, print all the posts on the console.
-     *  Catch all the exceptions thrown by the getPostsByEmailId() method of the PostService interface with
-     *  a single catch block which handles all exceptions using the Exception class and print the
-     *  exception message using the getMessage() method.
-     */
+
 
     private void deletePost() {
         if (!isLoggedIn) {
@@ -219,6 +210,7 @@ public class Application {
             int postId=scanner.nextInt();
             if(postService.deletePost(postId,loggedInEmailId)){
             System.out.println("post deleted successfully ");
+            return;
             }
             else {
                 System.out.println(" You are not authorised to delete this post");
@@ -228,28 +220,7 @@ public class Application {
             System.out.println(e.getMessage());
         }
     }
-    /**
-     * TODO 4.7. Implement the deletePost() method. This method should prompt the user for the
-     *  post id. Use the deletePost() method of the PostService interface to delete the post
-     *  corresponding to the post id. If the post was deleted successfully (deletePost() method of
-     *  the PostService returns true), print the message "Post deleted successfully!" on the console.
-     *  If the post was not deleted successfully (deletePost() method of the PostService returns false),
-     *  print the message "You are not authorised to delete this post" on the console.
-     *  Catch all the exceptions thrown by the deletePost() method of the PostService interface with
-     *  a single catch block which handles all exceptions using the Exception class and print the
-     *  exception message using the getMessage() method.
-     */
-    /**
-     * TODO 4.12. Implement the filterPost() method. This method should show all the unique tags present
-     *  in the POST table using the getAllTags() method of the PostService interface. Then it should
-     *  prompt the user for the tag. Use the getPostsByTag() method of the PostService interface to get all the
-     *  posts corresponding to the provided tag. If there are no posts corresponding to the
-     *  provided tag, then throw the PostNotFoundException with a message "Sorry no posts
-     *  exists for this tag". Otherwise, print all the posts on the console.
-     *  Catch all the exceptions thrown by the getPostsByTag() method of the PostService interface with
-     *  a single catch block which handles all exceptions using the Exception class and print the
-     *  exception message using the getMessage() method.
-     */
+
     private void filterPost() {
         if (!isLoggedIn) {
             System.out.println("You are not logged in.");

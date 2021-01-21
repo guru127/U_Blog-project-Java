@@ -60,7 +60,7 @@ public class PostDAOImpl implements PostDAO {
                 post.setTag(resultSet.getString("tag"));
                 post.setTitle(resultSet.getString("title"));
                 post.setDescription(resultSet.getString("description"));
-                post.setTimestamp(LocalDateTime.parse(resultSet.getString("timeStamp")));
+                post.setTimestamp((resultSet.getString("timeStamp")));
 
                 postList.add(post);
             }
@@ -88,7 +88,7 @@ public class PostDAOImpl implements PostDAO {
                 post.setTag(resultSet.getString("tag"));
                 post.setTitle(resultSet.getString("title"));
                 post.setDescription(resultSet.getString("description"));
-                post.setTimestamp(LocalDateTime.parse(resultSet.getString("timeStamp")));
+                post.setTimestamp((resultSet.getString("timeStamp")));
 
                 postList.add(post);
             }
