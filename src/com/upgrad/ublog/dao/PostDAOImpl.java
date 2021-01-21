@@ -99,29 +99,6 @@ public class PostDAOImpl implements PostDAO {
         return postList;
     }
 
-       /* List<Post> postList= new ArrayList<>();
-        Connection connection =Database.getInstance();
-        String sql ="SELECT * FROM post WHERE emailId ='"+tag+"'";
-        try{
-          Statement statement= connection.createStatement();
-          ResultSet resultSet=statement.executeQuery(sql);
-
-        while (resultSet.next()){
-            Post post=new Post();
-            post.setPostId(resultSet.getInt("postId"));
-            post.setEmailId(resultSet.getString("emailId"));
-            post.setTag(resultSet.getString("tag"));
-            post.setTitle(resultSet.getString("title"));
-            post.setDescription(resultSet.getString("description"));
-            post.setTimestamp(LocalDateTime.parse(resultSet.getString("timeStamp")));
-
-            postList.add(post);
-        }
-        } catch (SQLException e) {
-            e.getMessage();
-        }
-        return postList;
-    }*/
 
     @Override
     public Post findByPostId(int postId) throws SQLException {
