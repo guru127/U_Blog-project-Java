@@ -6,6 +6,7 @@ import com.upgrad.ublog.dtos.Post;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class PostDAOImpl implements PostDAO {
@@ -40,9 +41,6 @@ public class PostDAOImpl implements PostDAO {
     }
         return post;
 }
-    //Implement findByEmailId() method which takes email id
-    // as an input parameter and returns all the posts corresponding t
-    // o the email id from the Post table defined in the database.
 
 
     @Override
@@ -54,9 +52,7 @@ public class PostDAOImpl implements PostDAO {
         try {
             Statement statement= connection.createStatement();
             resultSet=statement.executeQuery(sql);
-            //PreparedStatement preparedStatement = connection.prepareStatement(sql);
-           // preparedStatement.setString(1,emailId);
-           // resultSet = preparedStatement.executeQuery(sql);
+
             while (resultSet.next()) {
                 Post post = new Post();
                 post.setPostId(resultSet.getInt("postId"));
@@ -70,14 +66,20 @@ public class PostDAOImpl implements PostDAO {
             }
         } catch (SQLException e) {
             e.getMessage();
-    /*   String sql ="SELECT * FROM post WHERE emailId=?";
-       ResultSet resultSet;
-       try {
-           System.out.println(" emailid   ="+emailId);
-           PreparedStatement preparedStatement = connection.prepareStatement(sql);
-           preparedStatement.setString(1,emailId);
-           resultSet = preparedStatement.executeQuery(sql);
-           System.out.println(resultSet+"thiss");
+
+       }
+        return postList;
+    }
+
+    @Override
+    public List<Post> findByTag(String tag) throws SQLException {
+        List<Post> postList= new ArrayList<>();
+        Connection connection =Database.getInstance();
+        String sql ="SELECT * FROM post WHERE emailId='"+tag+"'";
+        ResultSet resultSet=null;
+        try {
+            Statement statement= connection.createStatement();
+            resultSet=statement.executeQuery(sql);
 
             while (resultSet.next()) {
                 Post post = new Post();
@@ -86,24 +88,23 @@ public class PostDAOImpl implements PostDAO {
                 post.setTag(resultSet.getString("tag"));
                 post.setTitle(resultSet.getString("title"));
                 post.setDescription(resultSet.getString("description"));
-                post.setDescription(resultSet.getString("timeStamp"));
+                post.setTimestamp(LocalDateTime.parse(resultSet.getString("timeStamp")));
 
                 postList.add(post);
             }
         } catch (SQLException e) {
-           e.getMessage();*/
-       }
-        System.out.println(postList);
+            e.getMessage();
+
+        }
         return postList;
     }
 
-    @Override
-    public List<Post> findByTag(String tag) throws SQLException {
-        List<Post> postList= new ArrayList<>();
+       /* List<Post> postList= new ArrayList<>();
         Connection connection =Database.getInstance();
-        Statement statement= connection.createStatement();
-        String sql ="SELECT * FROM post WHERE emailId = '"+tag+"'";
-        ResultSet resultSet=statement.executeQuery(sql);
+        String sql ="SELECT * FROM post WHERE emailId ='"+tag+"'";
+        try{
+          Statement statement= connection.createStatement();
+          ResultSet resultSet=statement.executeQuery(sql);
 
         while (resultSet.next()){
             Post post=new Post();
@@ -116,8 +117,11 @@ public class PostDAOImpl implements PostDAO {
 
             postList.add(post);
         }
+        } catch (SQLException e) {
+            e.getMessage();
+        }
         return postList;
-    }
+    }*/
 
     @Override
     public Post findByPostId(int postId) throws SQLException {

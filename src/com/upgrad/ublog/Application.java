@@ -11,10 +11,7 @@ import com.upgrad.ublog.utils.LogWriter;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class Application {
     private Scanner scanner;
@@ -270,13 +267,13 @@ public class Application {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }if(tagSet!=null){
+            System.out.println("available tags are : ");
         for (String tag: tagSet) {
             System.out.println(tag);
         }
-        }
-        System.out.println("select tag: ");
+        }  System.out.println("select from above tags : ");
         String tag =scanner.nextLine();
-        List<Post> post=null;
+        List<Post> post=new ArrayList<>();
         try{
             post=postService.getPostsByTag(tag);
         } catch (Exception e) {
