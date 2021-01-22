@@ -85,7 +85,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public boolean deletePost(int postId, String emailId) throws Exception {
         Post post = null;
-        boolean flag=false;
+        //boolean flag=false;
         try {
             post = postDAO.findByPostId(postId);
         } catch (SQLException e) {
@@ -94,14 +94,13 @@ public class PostServiceImpl implements PostService {
 
         if (post != null && emailId.equals(post.getEmailId())) {
             try {
-                postDAO.deleteByPostId(postId);
-                flag=true;
+                return postDAO.deleteByPostId(postId);
             } catch (SQLException e) {
                 System.out.println("Some unexpected error occurred!");
             }
         }
 
-        return flag;
+        return false;
     }
 
 }

@@ -20,8 +20,8 @@ public class Application {
     private PostService postService;
     private UserService userService;
 
-    private boolean isLoggedIn;
-    private String loggedInEmailId;
+    private boolean isLoggedIn;//flog to check whether user logged in or not
+    private String loggedInEmailId;// an attribute to save emailId of user when he logged
 
     public Application(PostService postService, UserService userService) {
         scanner = new Scanner(System.in);
@@ -64,7 +64,9 @@ public class Application {
             }
         } while (flag);
     }
-
+    //This method is used to perform login function for the user.
+    //If the user is already logged in, then he won't be able to login again.
+    //Also a user can only login, if the emailId and password matches to the those given while registering.
     private void login() {
         if (isLoggedIn) {
             System.out.println("You are already logged in.");
@@ -91,7 +93,9 @@ public class Application {
             System.out.println(e.getMessage());
         }
     }
-
+    //This method is used to perform register function for the user.
+    //If the user is already logged in, then he won't be able to register.
+    //Also a user can only register, if the no user already registered with given email Id.
     private void register() {
         if (isLoggedIn) {
             System.out.println("You are already logged in.");
@@ -118,12 +122,6 @@ public class Application {
             System.out.println(e.getMessage());
         }
     }
-      /**
-     * TODO 6.1: Modify the existing code such that the following two operations occur simultaneously on
-     *  two independent threads.
-     *  thread1: Saving data into the database
-     *  thread2: Writing logs into the file
-     */
     private void createPost() {
         if (!isLoggedIn) {
             System.out.println("You are not logged in.");
@@ -189,7 +187,6 @@ public class Application {
         }
     }
 
-
     private void deletePost() {
         if (!isLoggedIn) {
             System.out.println("You are not logged in.");
@@ -204,6 +201,7 @@ public class Application {
 
         try{
             int postId=scanner.nextInt();
+            String  s=scanner.nextLine();
             if(postService.deletePost(postId,loggedInEmailId)){
             System.out.println("post deleted successfully ");
             return;
@@ -251,8 +249,6 @@ public class Application {
                 System.out.println(eachPost);
             }
         }
-
-
     }
 
     private void logout() {
@@ -269,7 +265,10 @@ public class Application {
         ServiceFactory serviceFactory = new ServiceFactory();
         UserService userService = serviceFactory.getUserService();
         PostService postService = serviceFactory.getPostService();
+        Thread logWriter =new Thread();
+        logWriter.start();
         Application application = new Application(postService, userService);
         application.start();
+
     }
 }

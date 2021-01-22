@@ -8,7 +8,10 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class LogWriter {
+public class LogWriter extends Thread{
+    @Override
+    public void run(){}
+
     public static void writeLog(String logMessage, String path) throws IOException{
     String fileName = "logs"+".log";
      String filePath = path +"/"+ fileName;
