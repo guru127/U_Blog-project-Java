@@ -2,14 +2,12 @@ package com.upgrad.ublog;
 
 import com.upgrad.ublog.dtos.Post;
 import com.upgrad.ublog.dtos.User;
-import com.upgrad.ublog.exceptions.PostNotFoundException;
 import com.upgrad.ublog.services.PostService;
 import com.upgrad.ublog.services.ServiceFactory;
 import com.upgrad.ublog.services.UserService;
 import com.upgrad.ublog.utils.LogWriter;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -132,7 +130,7 @@ public class Application {
         System.out.println("*****Create Post*****");
         System.out.println("*********************");
 
-        Post post= new Post();
+        Post post = new Post();
         post.setPostId();
         post.setEmailId(loggedInEmailId);
         System.out.println("enter post tag: ");
@@ -141,22 +139,32 @@ public class Application {
         post.setTitle(scanner.nextLine());
         System.out.println("enter post description");
         post.setDescription(scanner.nextLine());
-        post.setTimestamp( LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-        try{
-            postService.create(post);
-            System.out.println("post is created");
+        post.setTimestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
 
-            String messege=LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))+" "
-                    +"New post with title ["+post.getTitle()+"] created by [ "+post.getEmailId()+"]";
-            String directory=System.getProperty("user.dir");//to fetch file path
-            LogWriter.writeLog(messege, directory);
-
-            return;
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
+        String messege = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) + " "
+                + "New post with title [" + post.getTitle() + "] created by [ " + post.getEmailId() + "]";
+        String directory = System.getProperty("user.dir");//to fetch file path
+        Thread t1 = new Thread() {
+            public void run() {
+                try {
+                    postService.create(post);
+                    System.out.println("post is created");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        Thread t2 = new Thread() {
+            public void run() {
+                try {
+                    LogWriter.writeLog(messege, directory);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        t1.start();
+        t2.start();
     }
     private void searchPost() {
         if (!isLoggedIn) {
@@ -265,8 +273,6 @@ public class Application {
         ServiceFactory serviceFactory = new ServiceFactory();
         UserService userService = serviceFactory.getUserService();
         PostService postService = serviceFactory.getPostService();
-        Thread logWriter =new Thread();
-        logWriter.start();
         Application application = new Application(postService, userService);
         application.start();
 

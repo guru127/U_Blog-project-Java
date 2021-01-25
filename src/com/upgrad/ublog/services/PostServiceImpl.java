@@ -2,7 +2,6 @@ package com.upgrad.ublog.services;
 
 import com.upgrad.ublog.dao.DAOFactory;
 import com.upgrad.ublog.dao.PostDAO;
-import com.upgrad.ublog.dao.PostDAOImpl;
 import com.upgrad.ublog.dtos.Post;
 import com.upgrad.ublog.exceptions.PostNotFoundException;
 
@@ -33,7 +32,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post create(Post post) throws Exception {
         //Post post = null;
-        try {
+            try {
             if (post != null)
                 post = postDAO.create(post);
 

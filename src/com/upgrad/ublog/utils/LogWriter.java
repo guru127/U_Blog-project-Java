@@ -8,26 +8,23 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class LogWriter extends Thread{
-    @Override
-    public void run(){}
-
+public class LogWriter{
     public static void writeLog(String logMessage, String path) throws IOException{
-    String fileName = "logs"+".log";
-     String filePath = path +"/"+ fileName;
+      String fileName = "logs"+".log";
+      String message=logMessage;
+      String filePath = path +"/"+ fileName;
         try {
             if (!Files.exists(Paths.get(path))) {
                 Files.createDirectory(Paths.get(path));
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
-            bw.write(LocalDateTime.now().format(DateTimeFormatter.ofPattern(("dd/MM/yyyy HH:mm:ss")))+ "\t" +logMessage);
+        }  try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
+            bw.write(LocalDateTime.now().format(DateTimeFormatter.ofPattern(("dd/MM/yyyy HH:mm:ss")))+ "\t" +message);
             bw.newLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-}
 }
