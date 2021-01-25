@@ -148,7 +148,6 @@ public class Application {
             public void run() {
                 try {
                     postService.create(post);
-                    System.out.println("post is created");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
